@@ -1,0 +1,18 @@
+[package]
+name = "rustup-available-packages"
+version = "0.2.1"
+description = "Rustup tools state info"
+license = "MIT/Apache-2.0"
+keywords = ["rustup"]
+repository = "https://github.com/rust-lang/rustup-components-history"
+documentation = "https://docs.rs/rustup-available-packages/"
+readme = "README.md"
+edition = "2018"
+
+[dependencies]
+chrono = { version = "0.4.6", features = [ "serde" ] }
+thiserror = "1"
+log = "0.4.5"
+reqwest = { version = "0.11.2", features = ["blocking"] }
+serde = { version = "1", features = [ "derive" ] }
+toml = "0.5"

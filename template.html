@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Rustup packages availability on {{ current_target }}</title>
+        <link
+            rel="stylesheet"
+            href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+            integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+            crossorigin="anonymous"
+        >
+        <style>
+            .tier-box {
+                border: 1px solid #dbdbdb;
+                height: 400px;
+                margin: 0 0 10px 0;
+                overflow-y: auto;
+                padding: 5px 0;
+            }
+            .tier-box a, .tier-box span {
+                display: block;
+                width: 100%;
+                padding: 0 10px;
+            }
+            .bg-primary a {
+                color: #ffffff;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <h1 class="text-center">{{ current_target }}</h1>
+            <table class="table table-hover table-bordered table-responsive-lg table-sm">
+                <thead>
+                    <tr>
+                    {{#each title as |t|}}
+                        <th scope="col" class="text-center">{{t}}</th>
+                    {{/each}}
+                        <th scope="col" class="text-center">Last available</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each packages_availability as |row|}}
+                    <tr>
+                        <th scope="row">{{row.package_name}}</th>
+                        {{#each row.availability_list as |status|}}
+                        {{#if status}}
+                        <td class="table-primary text-center">present</td>
+                        {{else}}
+                        <td class="table-warning text-center">missing</td>
+                        {{/if}}
+                        {{/each}}
+                        {{#if row.last_available}}
+                        <td class="text-center">{{row.last_available}}</td>
+                        {{else}}
+                        <td class="text-center">N/A</td>
+                        {{/if}}
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+            <h2 class="text-center">Other targets</h2>
+            <div class="container">
+                <div class="row">
+                {{#each additional.tiers.tiers_and_targets as |tier_info|}}
+                    <div class="col">
+                        <h3 class="text-center">{{tier_info.0}}</h3>
+                        <div class="tier-box">
+                        {{#each tier_info.1 as |target|}}
+                            <div{{~#if (streq target.0 ../../current_target)}} class="bg-primary"{{/if~}}>
+                                {{~#if target.1~}}
+                                    <a href="{{target.0}}.html">{{target.0}}</a>
+                                {{~else~}}
+                                    <span>{{target.0~}}</span>
+                                {{/if~}}
+                            </div>
+                        {{/each}}
+                        </div>
+                    </div>
+                {{/each}}
+                </div>
+            </div>
+            {{#if additional.tiers.unknown_tier}}
+            <h2 class="text-center">Unknown tier targets</h2>
+            <div class="container">
+                <div class="row">
+                    <div class="col">
+                        <div class="tier-box">
+                            {{#each additional.tiers.unknown_tier as |target|}}
+                                <div><a href="{{target}}.html">{{target}}</a></div>
+                            {{/each}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {{/if}}
+            <div class="card-footer text-muted bg-transparent text-center">
+                <p>Generated at {{additional.datetime}}</p>
+                <p>Contributions are <a href="https://github.com/rust-lang/rustup-components-history">welcome</a>!
+                More info at <a href="https://github.com/rust-lang/rustup-components-history/blob/master/README.md#the-web-part">README.md</a></p>
+            </div>
+        </div>
+    </body>
+</html>
